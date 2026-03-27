@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Build artifacts
+engine/build/
+engine/dist/
+engine/*.spec
+assets/app_icon.ico
+assets/app_icon.icns
+
+# OS
+.DS_Store
+Thumbs.db
