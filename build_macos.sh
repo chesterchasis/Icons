@@ -18,20 +18,15 @@ cd "$root/engine"
 
 if [ -f "$icon_png" ]; then
   echo "[2/4] Convertir assets/app_icon.png a ICNS"
-  "$python" << 'EOF'
-from PIL import Image
+  ICON_PNG="$icon_png" ICON_ICNS="$icon_icns" "$python" << 'EOF'
 import os
+from PIL import Image
 
-icon_png = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "app_icon.png")
-icon_icns = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "app_icon.icns")
+icon_png = os.environ["ICON_PNG"]
+icon_icns = os.environ["ICON_ICNS"]
 
-# Abrir imagen PNG
 img = Image.open(icon_png).convert("RGBA")
-
-# Redimensionar a 1024x1024
 img = img.resize((1024, 1024), Image.Resampling.LANCZOS)
-
-# Guardar como ICNS
 img.save(icon_icns, format="ICNS")
 print(f"Icono convertido a: {icon_icns}")
 EOF

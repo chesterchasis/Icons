@@ -1,9 +1,11 @@
-Pon aqui el icono de la aplicacion antes del build.
+Icono de producto de ICON.
 
-Ruta recomendada:
-- assets\app_icon.png
+Archivo:
+- assets/app_icon.png
 
-Formato recomendado:
-- PNG cuadrado de 1024x1024 o mayor.
+Formato:
+- PNG cuadrado de 1024x1024
 
-El script build_windows.ps1 convertira automaticamente ese PNG en ICO para el ejecutable de Windows.
+Los scripts de build generan:
+- assets/app_icon.ico   (Windows)
+- assets/app_icon.icns  (macOS)

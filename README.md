@@ -1,227 +1,78 @@
 # ICON
-TEST DE CARGA A GITHUB
-Generador de iconos multiplataforma como aplicación de escritorio nativa.
 
-Disponible para **Windows** y **macOS**.
+Aplicación de escritorio para generar un pack de iconos a partir de una imagen. Una sola fuente, vista previa en vivo y un ZIP con los tamaños de Windows, macOS, iOS y Android.
 
-## Arquitectura
+<p align="center">
+  <img src="assets/app_icon.png" width="88" alt="Icono de ICON">
+</p>
 
-La app está construida como aplicación de escritorio nativa con PyQt5 (sin navegador web).
+## Uso
 
-- **Windows**: `.exe` ejecutable nativo
-- **macOS**: `.app` empaquetado para macOS
+1. Abre o arrastra una imagen (PNG, JPG, WEBP).
+2. Elige plataforma y forma.
+3. Ajusta zoom y posición.
+4. Exporta el ZIP.
 
-## Flujo de uso (MVP)
+| Destino | Contenido |
+| --- | --- |
+| Windows | `icon.ico` y PNG de 16 a 1024 px |
+| macOS | PNG de 128, 256, 512 y 1024 px |
+| iOS | App icons de 60 a 1024 px |
+| Android | `ic_launcher` en mdpi–xxxhdpi |
+| Todas | Las cuatro carpetas en un ZIP |
 
-1. Seleccionas la plataforma destino del icono
-2. Subes una imagen
-3. Eliges frame: `rounded`, `circle` o `square`
-4. Ajustas zoom y posición manualmente
-5. Ves vista previa en vivo
-6. Exportas un ZIP con los iconos generados
+## Ejecutar
 
-## Estructura del proyecto
+Requisito: Python 3.9+.
 
-```
-├── engine/
-│   ├── desktop_app.py         # Interfaz PyQt5
-│   ├── icon_processor.py       # Procesamiento y export
-│   ├── main.py                 # Punto de entrada
-│   ├── requirements.txt         # Dependencias
-│   └── requirements-dev.txt     # Dependencias dev (tests)
-├── build_windows.ps1           # Build para Windows
-├── build_macos.sh              # Build para macOS
-└── assets/
-    └── app_icon.png            # Icono fuente (1024x1024)
+**macOS**
+
+```bash
+./start_macos.sh
 ```
 
-## Requisitos previos
-
-### Windows
-- Python 3.8 o superior
-- PowerShell 5.0+
-- pip (gestor de paquetes Python)
-
-### macOS
-- Python 3.8 o superior
-- Terminal (bash/zsh)
-- pip (gestor de paquetes Python)
-
----
-
-# 🪟 INSTALACIÓN Y COMPILACIÓN - WINDOWS
-
-## Paso 1: Descargar el proyecto
-
-```powershell
-git clone https://github.com/tu-usuario/Icons.git
-cd Icons
-```
-
-O si descargaste el ZIP:
-```powershell
-cd tu-carpeta/Icons
-```
-
-## Paso 2: Crear entorno virtual
+**Windows**
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-```
-
-Si te pide permiso, ejecuta:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-## Paso 3: Instalar dependencias
-
-```powershell
 pip install -r engine/requirements.txt
-```
-
-## Paso 4: Ejecutar en desarrollo (opcional)
-
-```powershell
 .\.venv\Scripts\python.exe .\engine\main.py
 ```
 
-## Paso 5: Compilar aplicación (.exe)
+## Compilar
 
-Desde la raíz del proyecto:
-
-```powershell
-.\build_windows.ps1
-```
-
-**Resultado**: `engine/dist/ICON.exe`
-
-### Notas instalación icono personalizado
-
-1. Antes del build, coloca tu icono aquí: `assets/app_icon.png`
-2. Formato recomendado: PNG cuadrado de 1024x1024 píxeles
-3. El script genera automáticamente `assets/app_icon.ico` para Windows
-4. Si no colocas icono, se usa uno por defecto
-
-### Troubleshooting Windows
-
-**Error: "No se puede ejecutar Scripts/Activate.ps1"**
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-**Error: "python: command not found"**
-- Descarga Python de https://www.python.org/downloads/
-- En el instalador, marca: ✓ "Add Python to PATH"
-
----
-
-# 🍎 INSTALACIÓN Y COMPILACIÓN - macOS
-
-## Paso 1: Descargar el proyecto
-
-```bash
-git clone https://github.com/tu-usuario/Icons.git
-cd Icons
-```
-
-O si descargaste el ZIP:
-```bash
-cd tu-carpeta/Icons
-```
-
-## Paso 2: Crear entorno virtual
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-## Paso 3: Instalar dependencias
-
-```bash
-pip install -r engine/requirements.txt
-```
-
-## Paso 4: Ejecutar en desarrollo (opcional)
-
-```bash
-.venv/bin/python engine/main.py
-```
-
-## Paso 5: Compilar aplicación (.app)
-
-Desde la raíz del proyecto:
-
-```bash
-chmod +x build_macos.sh
-./build_macos.sh
-```
-
-**Resultado**: `engine/dist/ICON.app`
-
-### Ejecutar la app compilada
+| Sistema | Comando | Salida |
+| --- | --- | --- |
+| macOS | `./build_macos.sh` | `engine/dist/ICON.app` |
+| Windows | `.\build_windows.ps1` | `engine/dist/ICON.exe` |
 
 ```bash
 open engine/dist/ICON.app
 ```
 
-O doble-clic en `engine/dist/ICON.app` desde Finder.
+El icono de la aplicación es `assets/app_icon.png` (1024×1024). El build genera `.icns` y `.ico`.
 
-### Notas instalación icono personalizado
+## Proyecto
 
-1. Coloca tu icono aquí: `assets/app_icon.png`
-2. Formato recomendado: PNG cuadrado de 1024x1024 píxeles
-3. El script genera automáticamente `assets/app_icon.icns` para macOS
-4. Si no colocas icono, se usa uno por defecto
-
-### Troubleshooting macOS
-
-**Error: "python3: command not found"**
-- Instala Homebrew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-- Luego: `brew install python3`
-
-**Error: "Permission denied" al ejecutar build_macos.sh**
-```bash
-chmod +x build_macos.sh
-./build_macos.sh
+```
+engine/desktop_app.py     interfaz
+engine/icon_processor.py  recorte, tamaños y ZIP
+engine/main.py            entrada
+assets/app_icon.png       icono de producto
+start_macos.sh            arranque en macOS
+build_macos.sh            paquete .app
+build_windows.ps1         paquete .exe
 ```
 
-**Advertencia: "Cannot open ICON.app"**
-- Abre Finder, ve a `engine/dist/`
-- Haz clic derecho en `ICON.app` → "Abrir"
-- Confirma en la ventana de seguridad
+## Tests
 
----
-
-# 🧪 Tests (el desarrollo)
-
-Desde la carpeta `engine`:
-
-### Windows
-```powershell
-.\..\venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\..\venv\Scripts\python.exe -m pytest -v
-```
-
-### macOS
 ```bash
+cd engine
 ../.venv/bin/python -m pip install -r requirements-dev.txt
 ../.venv/bin/python -m pytest -v
 ```
 
----
-
-# 📝 Licencia
+## Licencia
 
 MIT
-
----
-
-## Soporte
-
-Si encuentras problemas:
-1. Verifica que Python 3.8+ está instalado: `python --version` (Windows) o `python3 --version` (macOS)
-2. Asegúrate que el entorno virtual está activado (ves `(.venv)` al inicio de la terminal)
-3. Revisa la carpeta `engine/dist/` después del build
