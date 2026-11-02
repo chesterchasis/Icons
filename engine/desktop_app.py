@@ -35,8 +35,15 @@ from PyQt5.QtWidgets import (
 from qfluentwidgets import Theme, setTheme, setThemeColor
 
 from icon_processor import export_icons_zip, open_image_rgba, render_preview
+from version import __version__
 
-ROOT = Path(__file__).resolve().parents[1]
+def _project_root() -> Path:
+    if getattr(sys, "frozen", False):
+        return Path(getattr(sys, "_MEIPASS"))
+    return Path(__file__).resolve().parents[1]
+
+
+ROOT = _project_root()
 ASSETS_DIR = ROOT / "assets"
 APP_ICON_PNG = ASSETS_DIR / "app_icon.png"
 APP_ICON_ICO = ASSETS_DIR / "app_icon.ico"
@@ -263,7 +270,11 @@ class IconWindow(QMainWindow):
         credit = QLabel("By chesterchasis")
         credit.setObjectName("credit")
         credit.setAlignment(Qt.AlignCenter)
+        version_label = QLabel(__version__)
+        version_label.setObjectName("credit")
+        version_label.setAlignment(Qt.AlignCenter)
         side.addWidget(credit)
+        side.addWidget(version_label)
 
         stage = QFrame()
         stage.setObjectName("stage")
@@ -591,6 +602,7 @@ def main() -> int:
     app = QApplication(sys.argv)
     app.setApplicationName("ICON")
     app.setApplicationDisplayName("ICON")
+    app.setApplicationVersion(__version__)
     setTheme(Theme.DARK)
     setThemeColor(QColor(ACCENT))
     if APP_ICON_PNG.exists():

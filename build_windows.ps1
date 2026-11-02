@@ -23,30 +23,18 @@ if (Test-Path $iconPng) {
 }
 
 Write-Host "[3/4] Compilar ICON.exe"
-if (Test-Path $iconIco) {
-  & $python -m PyInstaller `
-    --noconfirm `
-    --clean `
-    --windowed `
-    --onefile `
-    --name ICON `
-    --exclude-module PySide6 `
-    --exclude-module PySide2 `
-    --exclude-module PyQt6 `
-    --icon "$iconIco" `
-    desktop_app.py
-} else {
-  & $python -m PyInstaller `
-    --noconfirm `
-    --clean `
-    --windowed `
-    --onefile `
-    --name ICON `
-    --exclude-module PySide6 `
-    --exclude-module PySide2 `
-    --exclude-module PyQt6 `
-    desktop_app.py
-}
+$pyi = @(
+  "-m", "PyInstaller",
+  "--noconfirm", "--clean", "--windowed", "--onefile",
+  "--name", "ICON",
+  "--exclude-module", "PySide6",
+  "--exclude-module", "PySide2",
+  "--exclude-module", "PyQt6",
+  "--add-data", "$root\VERSION;.",
+  "--add-data", "$root\assets\app_icon.png;assets"
+)
+if (Test-Path $iconIco) { $pyi += @("--icon", $iconIco) }
+& $python @pyi desktop_app.py
 if ($LASTEXITCODE -ne 0) { throw "Fallo compilando ICON.exe" }
 
 Write-Host "[4/4] Listo"

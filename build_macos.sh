@@ -35,32 +35,24 @@ else
 fi
 
 echo "[3/4] Compilar ICON.app"
+icon_arg=()
 if [ -f "$icon_icns" ]; then
-  "$python" -m PyInstaller \
-    --noconfirm \
-    --clean \
-    --windowed \
-    --onefile \
-    --name ICON \
-    --exclude-module PySide6 \
-    --exclude-module PySide2 \
-    --exclude-module PyQt6 \
-    --icon "$icon_icns" \
-    --osx-bundle-identifier "com.icongen.app" \
-    desktop_app.py
-else
-  "$python" -m PyInstaller \
-    --noconfirm \
-    --clean \
-    --windowed \
-    --onefile \
-    --name ICON \
-    --exclude-module PySide6 \
-    --exclude-module PySide2 \
-    --exclude-module PyQt6 \
-    --osx-bundle-identifier "com.icongen.app" \
-    desktop_app.py
+  icon_arg=(--icon "$icon_icns")
 fi
+"$python" -m PyInstaller \
+  --noconfirm \
+  --clean \
+  --windowed \
+  --onefile \
+  --name ICON \
+  --exclude-module PySide6 \
+  --exclude-module PySide2 \
+  --exclude-module PyQt6 \
+  --add-data "$root/VERSION:." \
+  --add-data "$root/assets/app_icon.png:assets" \
+  --osx-bundle-identifier "com.icongen.app" \
+  "${icon_arg[@]}" \
+  desktop_app.py
 
 echo "[4/4] ¡Listo!"
 echo "Aplicación generada en: engine/dist/ICON.app"

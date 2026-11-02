@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compilar ICON.app
+        run: |
+          python3 -m venv .venv
+          chmod +x build_macos.sh
+          ./build_macos.sh
+          version="$(tr -d '[:space:]' < VERSION)"
+          ditto -c -k --keepParent "engine/dist/ICON.app" "ICON-${version}-macos.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: ICON-*-macos.zip
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compilar ICON.exe
+        shell: pwsh
+        run: |
+          python -m venv .venv
+          powershell -ExecutionPolicy Bypass -File .\build_windows.ps1
+          $version = (Get-Content -Raw VERSION).Trim()
+          Compress-Archive -Path engine\dist\ICON.exe -DestinationPath "ICON-$version-windows.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: ICON-*-windows.zip
+
+  publish:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: "*"
+          merge-multiple: true
+          path: release
+      - name: Publicar release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+          gh release create "$tag" release/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "ICON ${version}" \
+            --notes "$(cat <<EOF
+          Descargas de ICON ${version}. No hace falta instalar Python.
+
+          - **macOS:** \`ICON-${version}-macos.zip\`. Descomprime y abre \`ICON.app\`. Si macOS lo bloquea, clic derecho y Abrir.
+          - **Windows:** \`ICON-${version}-windows.zip\`. Descomprime y abre \`ICON.exe\`.
+
+          Hecho por chesterchasis. Licencia MIT.
+          EOF
+          )"

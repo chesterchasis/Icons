@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/chesterchasis/Icons"><img src="https://img.shields.io/badge/ICON-Icon%20Studio-7C5CFF?style=flat-square" alt="ICON"></a>
+  <a href="https://github.com/chesterchasis/Icons/releases/tag/v1.0.0"><img src="https://img.shields.io/badge/version-1.0.0-7C5CFF?style=flat-square" alt="1.0.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-171A22?style=flat-square" alt="MIT"></a>
   <a href="https://github.com/chesterchasis"><img src="https://img.shields.io/badge/by-chesterchasis-ffffff?style=flat-square" alt="by chesterchasis"></a>
 </p>
@@ -27,7 +27,18 @@ Abres una imagen, eliges plataforma y forma, ajustas el encuadre y exportas un Z
 | Android | `ic_launcher` en mdpi–xxxhdpi |
 | Todas | Las cuatro carpetas en un ZIP |
 
-## Empezar
+## Descargar
+
+Versión **1.0.0**. No hace falta instalar Python.
+
+| Sistema | Archivo |
+| --- | --- |
+| macOS | [ICON-1.0.0-macos.zip](https://github.com/chesterchasis/Icons/releases/download/v1.0.0/ICON-1.0.0-macos.zip) |
+| Windows | [ICON-1.0.0-windows.zip](https://github.com/chesterchasis/Icons/releases/download/v1.0.0/ICON-1.0.0-windows.zip) |
+
+En macOS, si el sistema bloquea la app, haz clic derecho en `ICON.app` y elige Abrir.
+
+## Empezar desde el código
 
 Python 3.9 o superior.
 
