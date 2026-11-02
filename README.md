@@ -1,19 +1,25 @@
-# ICON
-
-Aplicación de escritorio para generar un pack de iconos a partir de una imagen. Una sola fuente, vista previa en vivo y un ZIP con los tamaños de Windows, macOS, iOS y Android.
-
 <p align="center">
-  <img src="assets/app_icon.png" width="88" alt="Icono de ICON">
+  <img src="assets/cover.png" alt="ICON — Icon Studio, by chesterchasis" width="100%">
 </p>
 
-## Uso
+<p align="center">
+  <a href="https://github.com/chesterchasis/Icons"><img src="https://img.shields.io/badge/ICON-Icon%20Studio-7C5CFF?style=flat-square" alt="ICON"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-171A22?style=flat-square" alt="MIT"></a>
+  <a href="https://github.com/chesterchasis"><img src="https://img.shields.io/badge/by-chesterchasis-ffffff?style=flat-square" alt="by chesterchasis"></a>
+</p>
 
-1. Abre o arrastra una imagen (PNG, JPG, WEBP).
-2. Elige plataforma y forma.
-3. Ajusta zoom y posición.
-4. Exporta el ZIP.
+<p align="center">
+  Aplicación de escritorio para generar un pack de iconos<br>
+  a partir de una sola imagen.
+</p>
 
-| Destino | Contenido |
+---
+
+## Qué hace
+
+Abres una imagen, eliges plataforma y forma, ajustas el encuadre y exportas un ZIP listo para cada sistema.
+
+| Destino | Salida |
 | --- | --- |
 | Windows | `icon.ico` y PNG de 16 a 1024 px |
 | macOS | PNG de 128, 256, 512 y 1024 px |
@@ -21,9 +27,9 @@ Aplicación de escritorio para generar un pack de iconos a partir de una imagen.
 | Android | `ic_launcher` en mdpi–xxxhdpi |
 | Todas | Las cuatro carpetas en un ZIP |
 
-## Ejecutar
+## Empezar
 
-Requisito: Python 3.9+.
+Python 3.9 o superior.
 
 **macOS**
 
@@ -42,37 +48,13 @@ pip install -r engine/requirements.txt
 
 ## Compilar
 
-| Sistema | Comando | Salida |
+| Sistema | Comando | Resultado |
 | --- | --- | --- |
 | macOS | `./build_macos.sh` | `engine/dist/ICON.app` |
 | Windows | `.\build_windows.ps1` | `engine/dist/ICON.exe` |
 
-```bash
-open engine/dist/ICON.app
-```
-
-El icono de la aplicación es `assets/app_icon.png` (1024×1024). El build genera `.icns` y `.ico`.
-
-## Proyecto
-
-```
-engine/desktop_app.py     interfaz
-engine/icon_processor.py  recorte, tamaños y ZIP
-engine/main.py            entrada
-assets/app_icon.png       icono de producto
-start_macos.sh            arranque en macOS
-build_macos.sh            paquete .app
-build_windows.ps1         paquete .exe
-```
-
-## Tests
-
-```bash
-cd engine
-../.venv/bin/python -m pip install -r requirements-dev.txt
-../.venv/bin/python -m pytest -v
-```
-
 ## Licencia
 
-MIT
+Uso gratuito bajo [MIT](LICENSE).
+
+Hecho por **chesterchasis**.

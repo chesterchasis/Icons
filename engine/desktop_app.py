@@ -73,19 +73,42 @@ class PreviewCanvas(QWidget):
     def paintEvent(self, event) -> None:  # noqa: N802
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
-        rect = self.rect().adjusted(1, 1, -1, -1)
-        path = QPainterPath()
-        path.addRoundedRect(QRectF(rect), 16, 16)
-        painter.setClipPath(path)
-        painter.fillRect(rect, QColor(SURFACE))
+        painter.fillRect(self.rect(), QColor("#12141A"))
 
+        inset = 36
+        window = QRectF(self.rect().adjusted(inset, inset, -inset, -inset))
+        if window.width() < 180 or window.height() < 160:
+            window = QRectF(self.rect().adjusted(12, 12, -12, -12))
+
+        shadow = window.adjusted(0, 6, 0, 8)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(QColor(0, 0, 0, 70))
+        painter.drawRoundedRect(shadow, 14, 14)
+
+        painter.setBrush(QColor("#232838"))
+        painter.drawRoundedRect(window, 14, 14)
+
+        bar = QRectF(window.left(), window.top(), window.width(), 34)
+        bar_path = QPainterPath()
+        bar_path.addRoundedRect(window, 14, 14)
+        painter.setClipPath(bar_path)
+        painter.setBrush(QColor("#1A1E2B"))
+        painter.drawRect(bar)
+        painter.setClipping(False)
+
+        colors = ("#FF5F57", "#FEBC2E", "#28C840")
+        for index, color in enumerate(colors):
+            painter.setBrush(QColor(color))
+            painter.drawEllipse(QRectF(window.left() + 14 + index * 16, window.top() + 12, 9, 9))
+
+        content = QRectF(window.left(), window.top() + 34, window.width(), window.height() - 34)
         if self._pixmap.isNull():
             return
 
-        max_side = int(min(rect.width(), rect.height()) * 0.78)
+        max_side = int(min(content.width(), content.height()) * 0.62)
         scaled = self._pixmap.scaled(max_side, max_side, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        x = rect.center().x() - scaled.width() // 2
-        y = rect.center().y() - scaled.height() // 2
+        x = int(content.center().x() - scaled.width() / 2)
+        y = int(content.center().y() - scaled.height() / 2)
         painter.drawPixmap(x, y, scaled)
 
 
@@ -192,9 +215,9 @@ class IconWindow(QMainWindow):
         brand = QHBoxLayout()
         brand.setSpacing(8)
         mark = QLabel()
-        mark.setFixedSize(32, 32)
+        mark.setFixedSize(64, 64)
         if APP_ICON_PNG.exists():
-            mark.setPixmap(QPixmap(str(APP_ICON_PNG)).scaled(32, 32, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            mark.setPixmap(QPixmap(str(APP_ICON_PNG)).scaled(64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         self.open_button = QPushButton("Abrir")
         self.open_button.setObjectName("ghost")
         self.open_button.setCursor(Qt.PointingHandCursor)
@@ -230,10 +253,17 @@ class IconWindow(QMainWindow):
         self.export_button = QPushButton("Exportar")
         self.export_button.setObjectName("primary")
         self.export_button.setCursor(Qt.PointingHandCursor)
-        actions.addWidget(self.reset_button)
+        for button in (self.reset_button, self.export_button):
+            button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            button.setMinimumHeight(32)
+        actions.addWidget(self.reset_button, 1)
         actions.addWidget(self.export_button, 1)
         side.addLayout(actions)
-        side.addStretch(0)
+        side.addStretch(1)
+        credit = QLabel("By chesterchasis")
+        credit.setObjectName("credit")
+        credit.setAlignment(Qt.AlignCenter)
+        side.addWidget(credit)
 
         stage = QFrame()
         stage.setObjectName("stage")
@@ -321,9 +351,20 @@ class IconWindow(QMainWindow):
                 font-size: 13px;
                 border: none;
             }}
-            QFrame#sidebar, QFrame#stage {{
+            QFrame#sidebar {{
                 background: {SURFACE};
                 border: none;
+            }}
+            QFrame#stage {{
+                background: #12141A;
+                border: none;
+                border-radius: 12px;
+            }}
+            QLabel#credit {{
+                background: transparent;
+                color: rgba(255, 255, 255, 150);
+                border: none;
+                font-size: 10px;
             }}
             QLabel#fieldLabel {{
                 background: transparent;
